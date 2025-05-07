@@ -1,0 +1,69 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["hi", "hello", "hey", "good day", "what's up"],
+      "responses": ["Hello! I'm your Survey Assistant. Would you like to create a survey or take one?"]
+    },
+    {
+      "tag": "create_survey",
+      "patterns": ["create survey", "make survey", "new survey", "start survey creation"],
+      "responses": ["Great! Let's create a survey. What should we title it?"]
+    },
+    {
+      "tag": "survey_title",
+      "patterns": ["title is *", "call it *", "named *"],
+      "responses": ["Awesome! Survey titled '%s'. Now add your first question (start with 'Q:') or type 'done' to finish."]
+    },
+    {
+      "tag": "add_question",
+      "patterns": ["add question", "q: *", "question: *"],
+      "responses": ["Added question: '%s'. You can add another or type 'done' if finished."]
+    },
+    {
+      "tag": "survey_complete",
+      "patterns": ["done", "finish", "complete"],
+      "responses": ["Survey creation complete! Would you like to take the survey now?"]
+    },
+    {
+      "tag": "take_survey",
+      "patterns": ["take survey", "start survey", "begin survey"],
+      "responses": ["Starting survey! Please answer each question honestly."]
+    },
+    {
+      "tag": "survey_results",
+      "patterns": ["results", "show results", "get responses", "see answers"],
+      "responses": [
+        "Here are the survey results:\n\n{{survey_results}}\n\nAverage question rating: {{avg_rating}}/5"
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["bye", "exit", "quit", "goodbye"],
+      "responses": ["Thank you for using SurveyBot! Your responses have been saved. Goodbye!"]
+    },
+    {
+      "tag": "help",
+      "patterns": ["help", "what can you do", "options", "commands"],
+      "responses": [
+        "I can help you create or take a survey.\nCommands:\n- 'create survey'\n- 'take survey'\n- 'results'\n- 'done'\nStart by typing 'create survey' or 'take survey'."
+      ]
+    }
+  ],
+  "survey_questions": [
+    {
+      "question": "How satisfied are you with our service?",
+      "type": "rating",
+      "scale": 5
+    },
+    {
+      "question": "Which features do you use most frequently?",
+      "type": "multiple_choice",
+      "options": ["Dashboard", "Reports", "Settings", "Support"]
+    },
+    {
+      "question": "What improvements would you suggest?",
+      "type": "open_ended"
+    }
+  ]
+}

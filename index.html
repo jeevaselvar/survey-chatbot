@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SurveyBot</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-content">
+                <i class="fas fa-poll"></i>
+                <h1>SurveyBot</h1>
+                <p>Interactive Survey Assistant</p>
+            </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="message bot-message">
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <p>Hello! I'm your Survey Assistant. Type "create survey" to make a new one or "take survey" to start.</p>
+                </div>
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message..." autocomplete="off">
+            <button id="send-button">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            const chatMessages = $('#chat-messages');
+            
+            // Send message on button click or Enter key
+            $('#send-button').click(sendMessage);
+            $('#user-input').keypress(function(e) {
+                if (e.which === 13) sendMessage();
+            });
+            
+            function sendMessage() {
+                const userInput = $('#user-input').val().trim();
+                if (userInput) {
+                    addMessage(userInput, 'user-message');
+                    $('#user-input').val('');
+                    
+                    // Show typing indicator
+                    const typingIndicator = $(`
+                        <div class="message bot-message">
+                            <div class="message-content">
+                                <div class="typing-indicator">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    chatMessages.append(typingIndicator);
+                    chatMessages.scrollTop(chatMessages[0].scrollHeight);
+                    
+                    // Get bot response
+                    $.post('/get_response', {user_input: userInput}, function(data) {
+                        typingIndicator.remove();
+                        addMessage(data.response, 'bot-message');
+                        
+                        // If response contains rating options, add buttons
+                        if (data.response.includes('(1-5)')) {
+                            const ratingButtons = $('<div class="rating-buttons"></div>');
+                            for (let i = 1; i <= 5; i++) {
+                                ratingButtons.append(`<button class="rating-button" data-rating="${i}">${i}</button>`);
+                            }
+                            chatMessages.append(ratingButtons);
+                            $('.rating-button').click(function() {
+                                const rating = $(this).data('rating');
+                                addMessage(rating.toString(), 'user-message');
+                                ratingButtons.remove();
+                                $.post('/get_response', {user_input: rating}, function(data) {
+                                    addMessage(data.response, 'bot-message');
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+            
+            function addMessage(message, messageType) {
+                const messageElement = $(`
+                    <div class="message ${messageType}">
+                        <div class="message-content">
+                            <p>${message.replace(/\n/g, '<br>')}</p>
+                        </div>
+                    </div>
+                `);
+                chatMessages.append(messageElement);
+                chatMessages.scrollTop(chatMessages[0].scrollHeight);
+            }
+        });
+    </script>
+</body>
+</html>
