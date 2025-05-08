@@ -2,52 +2,77 @@
   "intents": [
     {
       "tag": "greeting",
-      "patterns": ["hi", "hello", "hey", "good day", "what's up"],
+      "patterns": ["hi", "hello", "hey", "good day", "what's up", "yo", "hi there", "greetings"],
       "responses": ["Hello! I'm your Survey Assistant. Would you like to create a survey or take one?"]
     },
     {
       "tag": "create_survey",
-      "patterns": ["create survey", "make survey", "new survey", "start survey creation"],
+      "patterns": ["create survey", "make survey", "new survey", "start survey creation", "design survey"],
       "responses": ["Great! Let's create a survey. What should we title it?"]
     },
     {
       "tag": "survey_title",
-      "patterns": ["title is *", "call it *", "named *"],
+      "patterns": ["title is *", "call it *", "named *", "survey name is *", "let's call it *"],
       "responses": ["Awesome! Survey titled '%s'. Now add your first question (start with 'Q:') or type 'done' to finish."]
     },
     {
       "tag": "add_question",
-      "patterns": ["add question", "q: *", "question: *"],
+      "patterns": ["add question", "q: *", "question: *", "insert question *", "new question *"],
       "responses": ["Added question: '%s'. You can add another or type 'done' if finished."]
     },
     {
+      "tag": "edit_question",
+      "patterns": ["edit question", "modify question", "change question", "update question"],
+      "responses": ["Please specify which question number you'd like to edit and its new content."]
+    },
+    {
+      "tag": "delete_question",
+      "patterns": ["delete question", "remove question", "drop question"],
+      "responses": ["Please specify the question number you'd like to delete."]
+    },
+    {
       "tag": "survey_complete",
-      "patterns": ["done", "finish", "complete"],
+      "patterns": ["done", "finish", "complete", "finalize", "end creation"],
       "responses": ["Survey creation complete! Would you like to take the survey now?"]
     },
     {
       "tag": "take_survey",
-      "patterns": ["take survey", "start survey", "begin survey"],
+      "patterns": ["take survey", "start survey", "begin survey", "answer survey", "respond to survey"],
       "responses": ["Starting survey! Please answer each question honestly."]
     },
     {
+      "tag": "skip_question",
+      "patterns": ["skip", "skip question", "pass", "next question", "move on"],
+      "responses": ["Okay, skipping this question. Moving to the next one."]
+    },
+    {
+      "tag": "cancel_survey",
+      "patterns": ["cancel", "stop survey", "abort", "exit survey"],
+      "responses": ["Survey canceled. You can start over anytime!"]
+    },
+    {
       "tag": "survey_results",
-      "patterns": ["results", "show results", "get responses", "see answers"],
+      "patterns": ["results", "show results", "get responses", "see answers", "view survey results"],
       "responses": [
         "Here are the survey results:\n\n{{survey_results}}\n\nAverage question rating: {{avg_rating}}/5"
       ]
     },
     {
-      "tag": "goodbye",
-      "patterns": ["bye", "exit", "quit", "goodbye"],
-      "responses": ["Thank you for using SurveyBot! Your responses have been saved. Goodbye!"]
+      "tag": "feedback",
+      "patterns": ["feedback", "give feedback", "leave feedback", "my feedback is *"],
+      "responses": ["Thank you for your feedback! We appreciate it."]
     },
     {
       "tag": "help",
-      "patterns": ["help", "what can you do", "options", "commands"],
+      "patterns": ["help", "what can you do", "options", "commands", "assist me", "show commands"],
       "responses": [
-        "I can help you create or take a survey.\nCommands:\n- 'create survey'\n- 'take survey'\n- 'results'\n- 'done'\nStart by typing 'create survey' or 'take survey'."
+        "I can help you create or take a survey.\nCommands:\n- 'create survey'\n- 'take survey'\n- 'results'\n- 'add question'\n- 'edit question'\n- 'delete question'\n- 'done'\nType 'help' anytime for these options."
       ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["bye", "exit", "quit", "goodbye", "see you", "later"],
+      "responses": ["Thank you for using SurveyBot! Your responses have been saved. Goodbye!"]
     }
   ],
   "survey_questions": [
@@ -59,10 +84,24 @@
     {
       "question": "Which features do you use most frequently?",
       "type": "multiple_choice",
-      "options": ["Dashboard", "Reports", "Settings", "Support"]
+      "options": ["Dashboard", "Reports", "Settings", "Support", "Notifications"]
     },
     {
       "question": "What improvements would you suggest?",
+      "type": "open_ended"
+    },
+    {
+      "question": "Would you recommend us to others?",
+      "type": "multiple_choice",
+      "options": ["Yes", "No", "Maybe"]
+    },
+    {
+      "question": "How likely are you to continue using our service?",
+      "type": "rating",
+      "scale": 5
+    },
+    {
+      "question": "Any additional comments?",
       "type": "open_ended"
     }
   ]
